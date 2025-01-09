@@ -1,6 +1,6 @@
 package com.co.softworld.credibanco.configuration;
 
-import com.co.softworld.credibanco.model.Customer;
+import com.co.softworld.credibanco.exception.InvalidCustomerException;
 import com.co.softworld.credibanco.repository.ICustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -41,6 +41,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/transaction/**").hasRole("admin")
                         .requestMatchers(HttpMethod.GET, "/transaction/**").hasAnyRole("admin", "test")
 
+                        .requestMatchers(HttpMethod.POST, "/customer/**").hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("admin", "test")
+
                         .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session
@@ -59,13 +62,12 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(ICustomerRepository customerRepository) {
 
         return username -> customerRepository.findByUsername(username)
-                .stream().peek(s -> log.info("User: {}", s)).findFirst()
                 .map(customer ->
                         User.builder()
                                 .username(customer.getUsername())
                                 .password(customer.getPassword())
                                 .authorities(AuthorityUtils.commaSeparatedStringToAuthorityList(customer.getRoles()))
                                 .build()
-                ).orElseThrow(() -> new RuntimeException("Not found customer with username: " + username));
+                ).orElseThrow(() -> new InvalidCustomerException("Not found customer with username: " + username));
     }
 }
