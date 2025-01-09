@@ -8,6 +8,7 @@ public interface IUtility {
     DateTimeFormatter FORMAT_DATE = ofPattern("MM/yyyy");
     DateTimeFormatter FORMAT_DATETIME = ofPattern("dd-MM-yyyy HH:mm:ss");
     String VALID_NAME = "^[\\w]+\\s*[\\w]*";
+    String VALID_ROLES = "\\bROLE_\\w+";
     String CARD_NOT_FOUND_OR_IS_ACTIVE = "card not found or is activated";
     String CARD_NOT_FOUND_OR_IS_INACTIVE = "card not found or is blocked";
     String CARD_INVALID_BALANCE = "balance cannot be less than or equal to zero";

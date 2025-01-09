@@ -1,12 +1,12 @@
 package com.co.softworld.credibanco.controller.impl;
 
 import com.co.softworld.credibanco.controller.ITransactionController;
-import com.co.softworld.credibanco.model.TransactionMapper;
 import com.co.softworld.credibanco.model.TransactionManager;
+import com.co.softworld.credibanco.model.TransactionMapper;
 import com.co.softworld.credibanco.service.ITransactionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/transaction")
 @Api(tags = "Transaction Controller")
+@AllArgsConstructor
 public class TransactionControllerImpl implements ITransactionController {
 
-    @Autowired
-    private ITransactionService transactionService;
+    private final ITransactionService transactionService;
 
     @Override
     @PostMapping("/purchase")
