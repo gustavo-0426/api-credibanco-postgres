@@ -2,7 +2,7 @@ services:
   credibanco:
     build:
       context: ../
-      dockerfile: credibanco-mssql/Dockerfile
+      dockerfile: compose/Dockerfile
     container_name: credibanco
     restart: always
     networks:
@@ -21,7 +21,7 @@ services:
 
   mssql:
     build:
-      context: docker-mssql
+      context: mssql
       dockerfile: Dockerfile
     container_name: mssql
     restart: always

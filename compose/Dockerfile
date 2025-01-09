@@ -1,5 +1,6 @@
-FROM maven:3.8.6-openjdk-18-slim AS build
+FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
 
+MAINTAINER Gustavo Castro
 WORKDIR api
 COPY ../pom.xml .
 ## descarga las dependencias
@@ -9,8 +10,7 @@ COPY ../src ./src
 RUN mvn clean package -DskipTests
 
 
-
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /home/api-credibanco
 COPY --from=build /api/target/*.jar ./api-credibanco-sqlserver.jar

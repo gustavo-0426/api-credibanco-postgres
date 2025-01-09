@@ -4,7 +4,7 @@ import com.co.softworld.credibanco.exception.InvalidProductException;
 import com.co.softworld.credibanco.model.Product;
 import com.co.softworld.credibanco.repository.IProductRepository;
 import com.co.softworld.credibanco.service.IProductService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +14,10 @@ import static com.co.softworld.credibanco.util.IUtility.PRODUCT_NOT_FOUND;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
+@AllArgsConstructor
 public class ProductServiceImpl implements IProductService {
 
-    @Autowired
-    private IProductRepository productRepository;
+    private final IProductRepository productRepository;
 
     @Override
     public ResponseEntity<Product> save(Product product) {

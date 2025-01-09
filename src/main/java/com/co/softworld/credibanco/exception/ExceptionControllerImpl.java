@@ -1,97 +1,80 @@
 package com.co.softworld.credibanco.exception;
 
-import com.co.softworld.credibanco.model.Error;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.net.URI;
 import java.sql.SQLException;
 
 import static com.co.softworld.credibanco.util.IUtility.EMPTY;
 import static com.co.softworld.credibanco.util.IUtility.FORMAT_DATETIME;
 import static java.time.LocalDateTime.now;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
-public class ExceptionControllerImpl implements IExceptionController {
+public class ExceptionControllerImpl {
 
-    @Autowired(required = false)
-    private Error error;
-
-    @Override
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Error> violationException(MethodArgumentNotValidException notValidException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(notValidException.getFieldError() != null ? notValidException.getFieldError().getDefaultMessage() : EMPTY);
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail violationException(MethodArgumentNotValidException notValidException, HttpServletRequest request) {
+
+        ProblemDetail problemDetail = ProblemDetail
+                .forStatusAndDetail(BAD_REQUEST, notValidException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Error> typeMismatchException(MethodArgumentTypeMismatchException matchException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(matchException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail typeMismatchException(MethodArgumentTypeMismatchException matchException, HttpServletRequest request) {
+
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, matchException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(InvalidTransactionException.class)
-    public ResponseEntity<Error> transactionException(InvalidTransactionException transactionException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(transactionException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail transactionException(InvalidTransactionException transactionException, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, transactionException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(InvalidProductException.class)
-    public ResponseEntity<Error> productException(InvalidProductException productException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(productException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail productException(InvalidProductException productException, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, productException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(InvalidCardException.class)
-    public ResponseEntity<Error> cardException(InvalidCardException cardException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(cardException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail cardException(InvalidCardException cardException, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, cardException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(SQLException.class)
-    public ResponseEntity<Error> sqlException(SQLException sqlException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(BAD_REQUEST.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(sqlException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+    public ProblemDetail sqlException(SQLException sqlException, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, sqlException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
-    @Override
     @ExceptionHandler(InvalidCustomerException.class)
-    public ResponseEntity<Error> customerException(InvalidCustomerException invalidCustomerException, HttpServletRequest request) {
-        error.setDate(now().format(FORMAT_DATETIME));
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setPatch(request.getServletPath());
-        error.setMessage(invalidCustomerException.getMessage());
-        return new ResponseEntity<>(error, NOT_FOUND);
+    public ProblemDetail customerException(InvalidCustomerException invalidCustomerException, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(BAD_REQUEST, invalidCustomerException.getMessage());
+        problemDetail.setType(URI.create(request.getServletPath() != null ? request.getServletPath() : EMPTY));
+        problemDetail.setProperty("timestamp", now().format(FORMAT_DATETIME));
+        return problemDetail;
     }
 
 }
