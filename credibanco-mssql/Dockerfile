@@ -1,4 +1,4 @@
-FROM maven:3.8.6-openjdk-11 AS build
+FROM maven:3.8.6-openjdk-18-slim AS build
 
 WORKDIR api
 COPY ../pom.xml .
@@ -10,7 +10,7 @@ RUN mvn clean package -DskipTests
 
 
 
-FROM eclipse-temurin:11.0.23_9-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /home/api-credibanco
 COPY --from=build /api/target/*.jar ./api-credibanco-sqlserver.jar

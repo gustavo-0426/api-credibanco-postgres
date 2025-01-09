@@ -1,0 +1,2 @@
+insert into customer (password, roles, username) values ('$2y$04$IgiMa8bMxHlHELpTX4FcMeOszUOHL57FGl/Ei/mh9yB4fvRQsORhe', 'ROLE_admin', 'gcastro');
+insert into customer (password, roles, username) values ('$2y$04$Pcs40WPVivgF7GSHwbFSz.fQ0ZiX1Ds5EoyYkth4MYeKi7TOaf5eS', 'ROLE_test', 'test');
