@@ -11,8 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static java.util.List.of;
@@ -30,8 +35,12 @@ class TransactionControllerImplTest {
 
     @Autowired
     private MockMvc transactionController;
-    @MockBean
+    @MockitoBean
     private ITransactionService transactionService;
+    @MockitoBean
+    private PasswordEncoder passwordEncoderMock;
+    @MockitoBean
+    private UserDetailsService userDetailServiceMock;
     private TransactionManager transaction;
     private TransactionMapper transactionMapper;
     private ResponseEntity<TransactionManager> transactionResponseEntity;
@@ -56,6 +65,18 @@ class TransactionControllerImplTest {
 
         transactionRequestJson = new ObjectMapper().writeValueAsString(transactionMapper);
         transactionResponseJson = new ObjectMapper().writeValueAsString(transaction);
+
+        when(passwordEncoderMock.encode("0000")).thenReturn("0000_encoded");
+        when(passwordEncoderMock.matches("0000", "0000_encoded")).thenReturn(true);
+
+        UserDetails userDetails = User.builder()
+                .username("test")
+                .password(passwordEncoderMock.encode("0000"))
+                .roles("admin")
+                .build();
+
+        when(userDetailServiceMock.loadUserByUsername("test")).thenReturn(userDetails);
+
     }
 
     @AfterEach
@@ -73,17 +94,22 @@ class TransactionControllerImplTest {
     void testPurchase() throws Exception {
         when(transactionService.purchase(transactionMapper)).thenReturn(transactionResponseEntity);
         transactionController.perform(post("/transaction/purchase")
-                .contentType(APPLICATION_JSON)
-                .content(transactionRequestJson))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
+                        .contentType(APPLICATION_JSON)
+                        .content(transactionRequestJson))
                 .andExpect(content().json(transactionResponseJson))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk()
+                );
     }
 
     @Test
     void testGetPurchase() throws Exception {
         when(transactionService.getPurchase(1)).thenReturn(transactionResponseEntity);
         transactionController.perform(get("/transaction/1")
-                .contentType(APPLICATION_JSON))
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
+                        .contentType(APPLICATION_JSON))
                 .andExpect(content().json(transactionResponseJson))
                 .andExpect(status().isOk());
     }
@@ -93,6 +119,8 @@ class TransactionControllerImplTest {
         transaction.setStatus(ANNULLED);
         when(transactionService.annulation(transactionMapper)).thenReturn(new ResponseEntity<>(transaction, OK));
         transactionController.perform(post("/transaction/anulation")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
                         .content(transactionRequestJson))
                 .andExpect(jsonPath("$.status").value(ANNULLED))
@@ -103,6 +131,8 @@ class TransactionControllerImplTest {
     void testFindAll() throws Exception {
         when(transactionService.findAll()).thenReturn(new ResponseEntity<>(of(transaction), OK));
         transactionController.perform(get("/transaction")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(of(transaction))))
                 .andExpect(status().isOk());

@@ -1,16 +1,15 @@
 package com.co.softworld.credibanco.exception;
 
 import com.co.softworld.credibanco.model.Error;
+import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
-import javax.servlet.http.HttpServletRequest;
 
 import java.sql.SQLException;
 import java.util.Optional;
@@ -25,13 +24,13 @@ class ExceptionControllerImplTest {
 
     @Autowired
     private ExceptionControllerImpl exceptionController;
-    @MockBean
+    @MockitoBean
     private HttpServletRequest request;
-    @MockBean
+    @MockitoBean
     private MethodArgumentNotValidException argumentNotValidException;
-    @MockBean
+    @MockitoBean
     private MethodArgumentTypeMismatchException argumentTypeMismatchException;
-    @MockBean
+    @MockitoBean
     private SQLException sqlException;
     private InvalidTransactionException transactionException;
     private InvalidProductException productException;

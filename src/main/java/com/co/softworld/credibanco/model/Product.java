@@ -1,21 +1,23 @@
 package com.co.softworld.credibanco.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-
 import static com.co.softworld.credibanco.util.IUtility.*;
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 
 @Entity
 @Data
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = IDENTITY, generator = "generate_sequence")
-    @SequenceGenerator(name = "generate_sequence", sequenceName = "sequence", allocationSize = 1, initialValue = 100000)
+    @GeneratedValue(strategy = IDENTITY)
     private int productId;
 
     @NotNull(message = "The name field must not have a null value")
