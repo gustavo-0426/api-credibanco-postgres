@@ -6,7 +6,7 @@ import com.co.softworld.credibanco.service.IProductService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +15,10 @@ import java.util.List;
 @RestController
 @RequestMapping("/product")
 @Api(tags = "Product Controller")
+@AllArgsConstructor
 public class ProductControllerImpl implements IProductController {
 
-    @Autowired
-    private IProductService productService;
+    private final IProductService productService;
 
     @Override
     @PostMapping

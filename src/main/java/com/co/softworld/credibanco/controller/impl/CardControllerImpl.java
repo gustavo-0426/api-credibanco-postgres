@@ -5,7 +5,7 @@ import com.co.softworld.credibanco.model.Card;
 import com.co.softworld.credibanco.service.ICardService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +15,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/card")
 @Api(tags = "Card Controller")
+@AllArgsConstructor
 public class CardControllerImpl implements ICardController {
 
-    @Autowired
-    private ICardService cardService;
+    private final ICardService cardService;
 
     @Override
     @PostMapping("/{productId}/number")

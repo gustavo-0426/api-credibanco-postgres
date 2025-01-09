@@ -2,7 +2,7 @@ package com.co.softworld.credibanco.exception;
 
 import com.co.softworld.credibanco.model.Error;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,32 +19,29 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestControllerAdvice
-public class ExceptionControllerImpl implements IExceptionController {
+@AllArgsConstructor
+public class ExceptionControllerImpl {
 
-    @Autowired(required = false)
-    private Error error;
+    private final Error error;
 
-    @Override
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Error> violationException(MethodArgumentNotValidException notValidException, HttpServletRequest request) {
+    public void violationException(MethodArgumentNotValidException notValidException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
         error.setStatus(BAD_REQUEST.value());
         error.setPatch(request.getServletPath());
         error.setMessage(notValidException.getFieldError() != null ? notValidException.getFieldError().getDefaultMessage() : EMPTY);
-        return new ResponseEntity<>(error, BAD_REQUEST);
+        new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<Error> typeMismatchException(MethodArgumentTypeMismatchException matchException, HttpServletRequest request) {
+    public void typeMismatchException(MethodArgumentTypeMismatchException matchException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
         error.setStatus(BAD_REQUEST.value());
         error.setPatch(request.getServletPath());
         error.setMessage(matchException.getMessage());
-        return new ResponseEntity<>(error, BAD_REQUEST);
+        new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(InvalidTransactionException.class)
     public ResponseEntity<Error> transactionException(InvalidTransactionException transactionException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
@@ -54,7 +51,6 @@ public class ExceptionControllerImpl implements IExceptionController {
         return new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(InvalidProductException.class)
     public ResponseEntity<Error> productException(InvalidProductException productException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
@@ -64,7 +60,6 @@ public class ExceptionControllerImpl implements IExceptionController {
         return new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(InvalidCardException.class)
     public ResponseEntity<Error> cardException(InvalidCardException cardException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
@@ -74,7 +69,6 @@ public class ExceptionControllerImpl implements IExceptionController {
         return new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(SQLException.class)
     public ResponseEntity<Error> sqlException(SQLException sqlException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));
@@ -84,7 +78,6 @@ public class ExceptionControllerImpl implements IExceptionController {
         return new ResponseEntity<>(error, BAD_REQUEST);
     }
 
-    @Override
     @ExceptionHandler(InvalidCustomerException.class)
     public ResponseEntity<Error> customerException(InvalidCustomerException invalidCustomerException, HttpServletRequest request) {
         error.setDate(now().format(FORMAT_DATETIME));

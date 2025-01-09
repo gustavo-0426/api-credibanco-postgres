@@ -3,12 +3,12 @@ package com.co.softworld.credibanco.service.impl;
 import com.co.softworld.credibanco.exception.InvalidCardException;
 import com.co.softworld.credibanco.exception.InvalidTransactionException;
 import com.co.softworld.credibanco.model.Card;
-import com.co.softworld.credibanco.model.TransactionMapper;
 import com.co.softworld.credibanco.model.TransactionManager;
+import com.co.softworld.credibanco.model.TransactionMapper;
 import com.co.softworld.credibanco.repository.ICardRepository;
 import com.co.softworld.credibanco.repository.ITransactionRepository;
 import com.co.softworld.credibanco.service.ITransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -20,15 +20,14 @@ import static com.co.softworld.credibanco.util.IUtility.*;
 import static java.lang.String.format;
 import static java.time.Duration.between;
 import static java.time.LocalDate.now;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.OK;
 
 @Service
+@AllArgsConstructor
 public class TransactionServiceImpl implements ITransactionService {
 
-    @Autowired
-    private ITransactionRepository transactionRepository;
-    @Autowired
-    private ICardRepository cardRepository;
+    private final ITransactionRepository transactionRepository;
+    private final ICardRepository cardRepository;
 
     @Override
     public ResponseEntity<TransactionManager> purchase(TransactionMapper mapper) {

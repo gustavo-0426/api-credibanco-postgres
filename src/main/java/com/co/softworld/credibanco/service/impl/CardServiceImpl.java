@@ -6,7 +6,7 @@ import com.co.softworld.credibanco.model.Product;
 import com.co.softworld.credibanco.repository.ICardRepository;
 import com.co.softworld.credibanco.repository.IProductRepository;
 import com.co.softworld.credibanco.service.ICardService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +21,11 @@ import static java.time.LocalDate.now;
 import static org.springframework.http.HttpStatus.OK;
 
 @Service
+@AllArgsConstructor
 public class CardServiceImpl implements ICardService {
 
-    @Autowired
-    private ICardRepository cardRepository;
-    @Autowired
-    private IProductRepository productRepository;
+    private final ICardRepository cardRepository;
+    private final IProductRepository productRepository;
 
     @Override
     public ResponseEntity<Card> generateCard(int productId) {
