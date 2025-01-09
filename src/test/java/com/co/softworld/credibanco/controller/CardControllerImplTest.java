@@ -10,8 +10,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -29,8 +34,12 @@ class CardControllerImplTest {
 
     @Autowired
     private MockMvc cardController;
-    @MockBean
+    @MockitoBean
     private ICardService cardServiceMock;
+    @MockitoBean
+    private PasswordEncoder passwordEncoderMock;
+    @MockitoBean
+    private UserDetailsService userDetailsServiceMock;
     private String jsonCard;
     private Card card;
     private ResponseEntity<Card>  cardResponseEntity;
@@ -47,6 +56,18 @@ class CardControllerImplTest {
         card.setActive(0);
         cardResponseEntity = new ResponseEntity<>(card, OK);
         jsonCard = new ObjectMapper().writeValueAsString(card);
+
+        when(passwordEncoderMock.encode("0000")).thenReturn("0000_encode");
+        when(passwordEncoderMock.matches("0000", "0000_encode")).thenReturn(true);
+
+        UserDetails userDetails = User
+                .builder()
+                .username("test")
+                .password(passwordEncoderMock.encode("0000"))
+                .authorities("ROLE_admin")
+                .build();
+
+        when(userDetailsServiceMock.loadUserByUsername("test")).thenReturn(userDetails);
     }
 
     @AfterEach
@@ -62,6 +83,8 @@ class CardControllerImplTest {
     void testGenerateCard() throws Exception {
         when(cardServiceMock.generateCard(100000)).thenReturn(cardResponseEntity);
         cardController.perform(post("/card/100000/number")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
                 .andExpect(content().json(jsonCard))
                 .andExpect(status().isOk());
@@ -73,6 +96,8 @@ class CardControllerImplTest {
         jsonCard = new ObjectMapper().writeValueAsString(card);
         when(cardServiceMock.activateCard(card)).thenReturn(new ResponseEntity<>(card, OK));
         cardController.perform(post("/card/enroll")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
                         .content(jsonCard))
                 .andExpect(jsonPath("$.active").value(1))
@@ -83,6 +108,8 @@ class CardControllerImplTest {
     void testBlock() throws Exception {
         when(cardServiceMock.block(1)).thenReturn(cardResponseEntity);
         cardController.perform(delete("/card/1")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.active").value(0))
                 .andExpect(status().isOk());
@@ -92,6 +119,8 @@ class CardControllerImplTest {
     void testAddBalance() throws Exception {
         when(cardServiceMock.addBalance(card)).thenReturn(cardResponseEntity);
         cardController.perform(post("/card/balance")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
                         .content(jsonCard))
                 .andExpect(content().json(jsonCard))
@@ -104,6 +133,8 @@ class CardControllerImplTest {
         map.put("balance", 0.0);
         when(cardServiceMock.getBalance(1)).thenReturn(new ResponseEntity<>(map, OK));
         cardController.perform(get("/card/balance/1")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.balance").value(0.0))
                 .andExpect(status().isOk());
@@ -113,6 +144,8 @@ class CardControllerImplTest {
     void testFindAll() throws Exception {
         when(cardServiceMock.findAll()).thenReturn(new ResponseEntity<>(of(card), OK));
         cardController.perform(get("/card")
+                        .with(SecurityMockMvcRequestPostProcessors.csrf())
+                        .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
                 .andExpect(content().json(new ObjectMapper().writeValueAsString(of(card))))
                 .andExpect(status().isOk());
