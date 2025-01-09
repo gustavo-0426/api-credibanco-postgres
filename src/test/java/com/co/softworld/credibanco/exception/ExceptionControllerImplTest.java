@@ -1,6 +1,5 @@
 package com.co.softworld.credibanco.exception;
 
-import com.co.softworld.credibanco.model.Error;
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +11,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.sql.SQLException;
-import java.util.Optional;
 
 import static com.co.softworld.credibanco.util.IUtility.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 class ExceptionControllerImplTest {
@@ -49,6 +47,7 @@ class ExceptionControllerImplTest {
         request = null;
         argumentNotValidException = null;
         argumentTypeMismatchException = null;
+        sqlException = null;
         transactionException = null;
         productException = null;
         cardException = null;
@@ -68,23 +67,20 @@ class ExceptionControllerImplTest {
 
     @Test
     void testTransactionException() {
-        Error error = exceptionController.transactionException(transactionException, request).getBody();
-        String message = Optional.ofNullable(error).orElse(new Error()).getMessage();
-        assertThat(message, equalTo(TRANSACTION_INVALID_EXPIRY_CARD));
+        String detail = exceptionController.transactionException(transactionException, request).getDetail();
+        assertThat(detail, equalTo(TRANSACTION_INVALID_EXPIRY_CARD));
     }
 
     @Test
     void testProductException() {
-        Error error = exceptionController.productException(productException, request).getBody();
-        String message = Optional.ofNullable(error).orElse(new Error()).getMessage();
-        assertThat(message, equalTo(PRODUCT_NOT_FOUND));
+        String detail = exceptionController.productException(productException, request).getDetail();
+        assertThat(detail, equalTo(PRODUCT_NOT_FOUND));
     }
 
     @Test
     void testCardException() {
-        Error error = exceptionController.cardException(cardException, request).getBody();
-        String message = Optional.ofNullable(error).orElse(new Error()).getMessage();
-        assertThat(message, equalTo(CARD_NOT_FOUND_OR_IS_INACTIVE));
+        String detail = exceptionController.cardException(cardException, request).getDetail();
+        assertThat(detail, equalTo(CARD_NOT_FOUND_OR_IS_INACTIVE));
     }
 
     @Test
