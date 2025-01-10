@@ -13,7 +13,7 @@ spring:
 api:
   version: v1
 
-# swagger = http://localhost:9095/swagger-ui/index.html
+# swagger = http://{host}:{port}/{api.version}/credibanco/swagger-ui/index.html
 springdoc:
   swagger-ui:
     path: /${api.version}/credibanco/
