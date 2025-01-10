@@ -10,7 +10,15 @@ spring:
     hibernate:
       ddl-auto: update
 
+api:
+  version: v1
+
+# swagger = http://localhost:9095/swagger-ui/index.html
+springdoc:
+  swagger-ui:
+    path: /${api.version}/credibanco/
+
 server:
   port: ${SERVER_PORT}
 
-# swagger = http://localhost:9091/swagger-ui/index.html
+
