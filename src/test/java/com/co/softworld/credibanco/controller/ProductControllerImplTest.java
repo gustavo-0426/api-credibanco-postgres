@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -28,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(IProductController.class)
 class ProductControllerImplTest {
+
+    @Value("${api.version}")
+    private String apiVersion;
 
     @Autowired
     private MockMvc productController;
@@ -74,7 +78,7 @@ class ProductControllerImplTest {
     @Test
     void testSave() throws Exception {
         when(productService.save(product)).thenReturn(productResponseEntity);
-        productController.perform(post("/product")
+        productController.perform(post("/" + apiVersion + "/product")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
@@ -86,7 +90,7 @@ class ProductControllerImplTest {
     @Test
     void testFindById() throws Exception {
         when(productService.findById(100000)).thenReturn(productResponseEntity);
-        productController.perform(get("/product/100000")
+        productController.perform(get("/" + apiVersion + "/product/100000")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -97,7 +101,7 @@ class ProductControllerImplTest {
     @Test
     void testFindAll() throws Exception {
         when(productService.findAll()).thenReturn(new ResponseEntity<>(of(product), OK));
-        productController.perform(get("/product")
+        productController.perform(get("/" + apiVersion + "/product")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -108,7 +112,7 @@ class ProductControllerImplTest {
     @Test
     void testDelete() throws Exception {
         when(productService.delete(100000)).thenReturn(productResponseEntity);
-        productController.perform(delete("/product/100000")
+        productController.perform(delete("/" + apiVersion + "/product/100000")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))

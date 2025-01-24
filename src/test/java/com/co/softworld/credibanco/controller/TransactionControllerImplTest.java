@@ -10,6 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -32,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ITransactionController.class)
 class TransactionControllerImplTest {
+
+    @Value("${api.version}")
+    private String apiVersion;
 
     @Autowired
     private MockMvc transactionController;
@@ -93,7 +97,7 @@ class TransactionControllerImplTest {
     @Test
     void testPurchase() throws Exception {
         when(transactionService.purchase(transactionMapper)).thenReturn(transactionResponseEntity);
-        transactionController.perform(post("/transaction/purchase")
+        transactionController.perform(post("/" + apiVersion + "/transaction/purchase")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
@@ -106,7 +110,7 @@ class TransactionControllerImplTest {
     @Test
     void testGetPurchase() throws Exception {
         when(transactionService.getPurchase(1)).thenReturn(transactionResponseEntity);
-        transactionController.perform(get("/transaction/1")
+        transactionController.perform(get("/" + apiVersion + "/transaction/1")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -118,7 +122,7 @@ class TransactionControllerImplTest {
     void testAnnulation() throws Exception {
         transaction.setStatus(ANNULLED);
         when(transactionService.annulation(transactionMapper)).thenReturn(new ResponseEntity<>(transaction, OK));
-        transactionController.perform(post("/transaction/anulation")
+        transactionController.perform(post("/" + apiVersion + "/transaction/anulation")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
@@ -130,7 +134,7 @@ class TransactionControllerImplTest {
     @Test
     void testFindAll() throws Exception {
         when(transactionService.findAll()).thenReturn(new ResponseEntity<>(of(transaction), OK));
-        transactionController.perform(get("/transaction")
+        transactionController.perform(get("/" + apiVersion + "/transaction")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))

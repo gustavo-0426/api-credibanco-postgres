@@ -3,6 +3,7 @@ package com.co.softworld.credibanco.configuration;
 import com.co.softworld.credibanco.exception.InvalidCustomerException;
 import com.co.softworld.credibanco.repository.ICustomerRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,31 +19,38 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.Optional;
-
 @Slf4j
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
+    @Value("${api.version}")
+    private String apiVersion;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+        final String urlCard = "/" + apiVersion + "/card/**";
+        final String urlProduct = "/" + apiVersion + "/product/**";
+        final String urlTransaction = "/" + apiVersion + "/transaction/**";
+        final String urlCustomer = "/" + apiVersion + "/customer/**";
+
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/card/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.DELETE, "/card/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.GET, "/card/**").hasAnyRole("admin", "test")
+                        .requestMatchers(HttpMethod.POST, urlCard).hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE, urlCard).hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, urlCard).hasAnyRole("admin", "test")
 
-                        .requestMatchers(HttpMethod.POST, "/product/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.DELETE, "/product/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.GET, "/product/**").hasAnyRole("admin", "test")
+                        .requestMatchers(HttpMethod.POST, urlProduct).hasRole("admin")
+                        .requestMatchers(HttpMethod.DELETE, urlProduct).hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, urlProduct).hasAnyRole("admin", "test")
 
-                        .requestMatchers(HttpMethod.POST, "/transaction/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.GET, "/transaction/**").hasAnyRole("admin", "test")
+                        .requestMatchers(HttpMethod.POST, urlTransaction).hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, urlTransaction).hasAnyRole("admin", "test")
 
-                        .requestMatchers(HttpMethod.POST, "/customer/**").hasRole("admin")
-                        .requestMatchers(HttpMethod.GET, "/customer/**").hasAnyRole("admin", "test")
+                        .requestMatchers(HttpMethod.POST, urlCustomer).hasRole("admin")
+                        .requestMatchers(HttpMethod.GET, urlCustomer).hasAnyRole("admin", "test")
 
                         .anyRequest().permitAll()
                 )
