@@ -9,6 +9,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -32,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ICardController.class)
 class CardControllerImplTest {
 
+    @Value("${api.version}")
+    private String apiVersion;
+
     @Autowired
     private MockMvc cardController;
     @MockitoBean
@@ -42,7 +46,7 @@ class CardControllerImplTest {
     private UserDetailsService userDetailsServiceMock;
     private String jsonCard;
     private Card card;
-    private ResponseEntity<Card>  cardResponseEntity;
+    private ResponseEntity<Card> cardResponseEntity;
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
@@ -82,7 +86,7 @@ class CardControllerImplTest {
     @Test
     void testGenerateCard() throws Exception {
         when(cardServiceMock.generateCard(100000)).thenReturn(cardResponseEntity);
-        cardController.perform(post("/card/100000/number")
+        cardController.perform(post("/" + apiVersion + "/card/100000/number")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -95,7 +99,7 @@ class CardControllerImplTest {
         card.setActive(1);
         jsonCard = new ObjectMapper().writeValueAsString(card);
         when(cardServiceMock.activateCard(card)).thenReturn(new ResponseEntity<>(card, OK));
-        cardController.perform(post("/card/enroll")
+        cardController.perform(post("/" + apiVersion + "/card/enroll")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
@@ -107,7 +111,7 @@ class CardControllerImplTest {
     @Test
     void testBlock() throws Exception {
         when(cardServiceMock.block(1)).thenReturn(cardResponseEntity);
-        cardController.perform(delete("/card/1")
+        cardController.perform(delete("/" + apiVersion + "/card/1")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -118,7 +122,7 @@ class CardControllerImplTest {
     @Test
     void testAddBalance() throws Exception {
         when(cardServiceMock.addBalance(card)).thenReturn(cardResponseEntity);
-        cardController.perform(post("/card/balance")
+        cardController.perform(post("/" + apiVersion + "/card/balance")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON)
@@ -132,7 +136,7 @@ class CardControllerImplTest {
         Map<String, Double> map = new HashMap<>();
         map.put("balance", 0.0);
         when(cardServiceMock.getBalance(1)).thenReturn(new ResponseEntity<>(map, OK));
-        cardController.perform(get("/card/balance/1")
+        cardController.perform(get("/" + apiVersion + "/card/balance/1")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))
@@ -143,7 +147,7 @@ class CardControllerImplTest {
     @Test
     void testFindAll() throws Exception {
         when(cardServiceMock.findAll()).thenReturn(new ResponseEntity<>(of(card), OK));
-        cardController.perform(get("/card")
+        cardController.perform(get("/" + apiVersion + "/card")
                         .with(SecurityMockMvcRequestPostProcessors.csrf())
                         .with(SecurityMockMvcRequestPostProcessors.httpBasic("test", "0000"))
                         .contentType(APPLICATION_JSON))

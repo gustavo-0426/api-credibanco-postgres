@@ -1,6 +1,6 @@
 FROM maven:3.9.9-eclipse-temurin-21-alpine AS build
 
-MAINTAINER Gustavo Castro
+LABEL org.opencontainers.image.authors="gustavoprasca@hotmail.com"
 WORKDIR api
 COPY ../pom.xml .
 ## descarga las dependencias
