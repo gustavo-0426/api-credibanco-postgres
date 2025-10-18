@@ -9,6 +9,11 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:insert_users.sql
+      continue-on-error: false
 
 api:
   version: v1
