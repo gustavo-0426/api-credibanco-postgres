@@ -9,6 +9,7 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
+    defer-datasource-initialization: true
   sql:
     init:
       mode: always
@@ -24,4 +25,4 @@ springdoc:
     path: /${api.version}/credibanco/
 
 server:
-  port: ${SERVER_PORT:1010}
+  port: ${SERVER_PORT}
