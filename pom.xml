@@ -8,9 +8,9 @@
 		<version>3.4.1</version>
 	</parent>
 	<groupId>com.co.softworld.credibanco</groupId>
-	<artifactId>api-credibanco-sqlserver</artifactId>
+	<artifactId>api-credibanco-postgres</artifactId>
 	<version>2.0.0</version>
-	<name>api-credibanco-sqlserver</name>
+	<name>api-credibanco-postgres</name>
 	<description>This is an api for credibanco</description>
 
 	<properties>
@@ -47,8 +47,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.h2database</groupId>

@@ -13,6 +13,6 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 
 WORKDIR /home/api-credibanco
-COPY --from=build /api/target/*.jar ./api-credibanco-sqlserver.jar
+COPY --from=build /api/target/*.jar ./api-credibanco-postgres.jar
 EXPOSE 9091
-ENTRYPOINT ["java","-jar","./api-credibanco-sqlserver.jar"]
+ENTRYPOINT ["java","-jar","./api-credibanco-postgres.jar"]
