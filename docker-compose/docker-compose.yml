@@ -3,7 +3,7 @@ services:
     build:
       context: ../
       dockerfile: docker-compose/Dockerfile
-    image: gustavo0426/credibanco-api:latest
+    image: gustavo0426/credibanco-api-postgres:latest
     container_name: credibanco-api
     restart: always
     environment:
@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     ports:
-      - "5433:5432"
+      - "5432:5432"
     networks:
       - credibanco_network
       - shared_pgadmin_network
@@ -39,6 +39,7 @@ services:
 networks:
   credibanco_network:
     name: credibanco_network
+    driver: bridge
   shared_pgadmin_network:
     external: true
 
