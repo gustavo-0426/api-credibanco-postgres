@@ -2,7 +2,7 @@ services:
   credibanco:
     build:
       context: ../
-      dockerfile: credibanco/Dockerfile
+      dockerfile: docker-compose/Dockerfile
     image: gustavo0426/credibanco-api:latest
     container_name: credibanco-api
     restart: always
