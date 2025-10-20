@@ -16,7 +16,7 @@ services:
     ports:
       - "9091:${SERVER_PORT}"
     networks:
-      - network
+      - credibanco_network
     depends_on:
       - postgres-db
 
@@ -31,14 +31,16 @@ services:
     ports:
       - "5433:5432"
     networks:
-      - network
+      - credibanco_network
       - shared_pgadmin_network
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - credibanco_postgres_data:/var/lib/postgresql/data
 
 networks:
-  network:
+  credibanco_network:
+    name: credibanco_network
   shared_pgadmin_network:
     external: true
+
 volumes:
-  postgres_data:
+  credibanco_postgres_data:
