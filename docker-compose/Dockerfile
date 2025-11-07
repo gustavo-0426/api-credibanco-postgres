@@ -9,7 +9,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     update-ca-certificates
 
-WORKDIR /app/credibanco-api-postgres
+WORKDIR /app/api-credibanco-postgres
 
 # Copiar solo pom.xml para cachear dependencias
 COPY ../pom.xml .
@@ -26,18 +26,21 @@ RUN mvn clean package -DskipTests -B
 
 FROM eclipse-temurin:21-jre-alpine
 
+# Variable de entorno para puerto
+ENV SERVER_PORT=
+
 # Crear usuario no-root para seguridad
 RUN addgroup -g 1001 -S credibanco-user && \
     adduser -S -D -H -u 1001 -s /sbin/nologin -G credibanco-user credibanco-user
 
-WORKDIR /home/credibanco-api-postgres
+WORKDIR /home/api-credibanco-postgres
 
 # Copiar JAR y cambiar permisos
-COPY --from=build /app/credibanco-api-postgres/target/*.jar ./credibanco-api-postgres.jar
-RUN chown credibanco-user:credibanco-user credibanco-api-postgres.jar
+COPY --from=build /app/api-credibanco-postgres/target/*.jar ./api-credibanco-postgres.jar
+RUN chown credibanco-user:credibanco-user api-credibanco-postgres.jar
 
 # Cambiar a usuario no-root
 USER credibanco-user
 
-EXPOSE 9091
-ENTRYPOINT ["java","-jar","./credibanco-api-postgres.jar"]
+EXPOSE ${SERVER_PORT}
+ENTRYPOINT ["java","-jar","./api-credibanco-postgres.jar"]
