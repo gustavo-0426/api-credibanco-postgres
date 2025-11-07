@@ -8,9 +8,9 @@
 		<version>3.4.1</version>
 	</parent>
 	<groupId>com.co.softworld.credibanco</groupId>
-	<artifactId>credibanco-api-postgres</artifactId>
+	<artifactId>api-credibanco-postgres</artifactId>
 	<version>2.0.0</version>
-	<name>credibanco-api-postgres</name>
+	<name>api-credibanco-postgres</name>
 	<description>This is an api for credibanco</description>
 
 	<properties>

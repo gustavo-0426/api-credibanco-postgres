@@ -3,8 +3,8 @@ services:
     build:
       context: ../
       dockerfile: docker-compose/Dockerfile
-    image: gustavo0426/credibanco-api-postgres:latest
-    container_name: credibanco-api
+    image: gustavo0426/api-credibanco-postgres:latest
+    container_name: api-credibanco
     restart: always
     environment:
       DB_USERNAME: ${DATABASE_USERNAME}
@@ -14,22 +14,22 @@ services:
       DB_PORT: ${DATABASE_PORT}
       SERVER_PORT: ${SERVER_PORT}
     ports:
-      - "9091:${SERVER_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
     networks:
       - credibanco_network
     depends_on:
-      - postgres-db
+      - credibanco-db
 
-  postgres-db:
+  credibanco-db:
     image: postgres:16-alpine
-    container_name: credibanco-db
+    container_name: db-credibanco
     restart: always
     environment:
       POSTGRES_USER: ${DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
     ports:
-      - "5432:5432"
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
     networks:
       - credibanco_network
       - shared_pgadmin_network
@@ -45,3 +45,4 @@ networks:
 
 volumes:
   credibanco_postgres_data:
+    name: credibanco_postgres_data
