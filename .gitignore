@@ -2,6 +2,7 @@ HELP.md
 !**/src/main/**
 !**/src/test/**
 .env
+diagramas/*
 
 ### STS ###
 .apt_generated
