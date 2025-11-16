@@ -7,11 +7,11 @@ services:
     container_name: api-credibanco
     restart: always
     environment:
-      DB_USERNAME: ${DATABASE_USERNAME}
-      DB_PASSWORD: ${DATABASE_PASSWORD}
-      DB_DATABASE: ${DATABASE_NAME}
-      DB_HOST: ${DATABASE_HOST}
-      DB_PORT: ${DATABASE_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
       SERVER_PORT: ${SERVER_PORT}
     ports:
       - "${SERVER_PORT}:${SERVER_PORT}"
@@ -25,11 +25,11 @@ services:
     container_name: db-credibanco
     restart: always
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
     ports:
-      - "${DATABASE_PORT}:${DATABASE_PORT}"
+      - "${DB_PORT}:${DB_PORT}"
     networks:
       - credibanco_network
       - shared_pgadmin_network
