@@ -182,45 +182,7 @@ Una vez que la aplicación esté ejecutándose, puedes acceder a la documentaci�
 - **Swagger UI:** [http://localhost:9091/v1/credibanco/swagger-ui/index.html](http://localhost:9091/v1/credibanco/swagger-ui/index.html)
 - **OpenAPI JSON:** [http://localhost:9091/v3/api-docs](http://localhost:9091/v3/api-docs)
 
-### � Endpoints Principales
-
-#### 🃏 Card Management (`/v1/card`)
-
-```bash
-# Generar tarjeta
-POST /v1/card/{productId}/number
-
-# Activar tarjeta
-POST /v1/card/enroll
-Body: {"cardId": 123}
-
-# Bloquear tarjeta
-DELETE /v1/card/{cardId}
-
-# Recargar saldo
-POST /v1/card/balance
-Body: {"cardId": 123, "balance": 100.00}
-
-# Consultar saldo
-GET /v1/card/balance/{cardId}
-
-# Listar todas las tarjetas
-GET /v1/card
-```
-
-#### 💳 Product Management (`/v1/product`)
-
-Gestión de productos bancarios asociados a tarjetas.
-
-#### 💰 Transaction Management (`/v1/transaction`)
-
-Registro y consulta de transacciones realizadas.
-
-#### 👥 Customer Management (`/v1/customer`)
-
-Gestión de usuarios del sistema (solo administradores).
-
-### �🗄️ Administración de Base de Datos
+### 🗄️ Administración de Base de Datos
 
 Para gestionar y administrar la base de datos PostgreSQL, se debe conectar al servidor **pgAdmin**:
 
