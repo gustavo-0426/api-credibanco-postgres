@@ -115,9 +115,9 @@
 
 ### 1️⃣ Variables de Entorno
 
-Agregar variables de entorno del proyecto en la siguiente ruta:
+Crear y configurar el archivo de variables de entorno:
 ```bash
-cd /docker-compose/.env
+cp docker-compose/env.example docker-compose/.env
 ```
 
 ### 2️⃣ Ejecutar Aplicación con Docker Compose
