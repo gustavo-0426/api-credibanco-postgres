@@ -15,7 +15,6 @@
 - [🏗️ Arquitectura](#arquitectura)
 - [📋 Requisitos Previos](#requisitos-previos)
 - [⚡ Inicio Rápido (5 minutos)](#inicio-rapido)
-- [💾 Configuración de Bases de Datos](settings-README.md)
 - [🔐 Seguridad y Autenticación](#seguridad)
 - [📚 API Documentation](#api-documentation)
 - [🧪 Testing](#testing)
