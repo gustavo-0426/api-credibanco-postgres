@@ -124,17 +124,26 @@ cp docker-compose/env.example docker-compose/.env
 #### Construir y ejecutar:
 
 ```bash
-docker-compose -f docker-compose/compose.yml up -d
+docker compose -f docker-compose/compose.yml up -d
 ```
 
 #### Verificar contenedores activos:
 ```bash
-docker-compose -f docker-compose/compose.yml ps
+docker compose -f docker-compose/compose.yml ps
 ```
 
 #### Ver logs en tiempo real:
 ```bash
-docker-compose -f docker-compose/compose.yml logs -f
+docker compose -f docker-compose/compose.yml logs -f
+```
+
+#### 🔄 Reconstruir imagen después de cambios de código
+
+Cuando realices cambios en el código, archivos de configuración o en el `pom.xml`, debes reconstruir la imagen Docker:
+
+```bash
+# Reconstruir la imagen  y ejecutarla 
+docker compose -f docker-compose/compose.yml up -d --build
 ```
 
 ---
