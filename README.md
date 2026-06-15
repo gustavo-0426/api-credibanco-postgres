@@ -116,7 +116,7 @@
 
 Crear y configurar el archivo de variables de entorno:
 ```bash
-cp docker-compose/env.example docker-compose/.env
+cp credibanco-docker-compose/env.example credibanco-docker-compose/.env
 ```
 
 ### 2️⃣ Ejecutar Aplicación con Docker Compose
@@ -124,17 +124,17 @@ cp docker-compose/env.example docker-compose/.env
 #### Construir y ejecutar:
 
 ```bash
-docker compose -f docker-compose/compose.yml up -d
+docker compose -f credibanco-docker-compose/compose.yml up -d
 ```
 
 #### Verificar contenedores activos:
 ```bash
-docker compose -f docker-compose/compose.yml ps
+docker compose -f credibanco-docker-compose/compose.yml ps
 ```
 
 #### Ver logs en tiempo real:
 ```bash
-docker compose -f docker-compose/compose.yml logs -f
+docker compose -f credibanco-docker-compose/compose.yml logs -f
 ```
 
 #### 🔄 Reconstruir imagen después de cambios de código
@@ -143,7 +143,7 @@ Cuando realices cambios en el código, archivos de configuración o en el `pom.x
 
 ```bash
 # Reconstruir la imagen  y ejecutarla 
-docker compose -f docker-compose/compose.yml up -d --build
+docker compose -f credibanco-docker-compose/compose.yml up -d --build
 ```
 
 ---
